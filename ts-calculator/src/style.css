@@ -1,6 +1,12 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   /* color-scheme: light dark; */
+  --standard-gap: .4rem;
+  --standard-border-radiux: 10px;
+  --warn: rgb(158, 55, 37);
+  --warn-hover: rgb(224, 108, 88);
+  --accent: rgb(196, 150, 36);
+  --accent-hover: rgb(226, 185, 81);
 }
 
 *, ::before, ::after{
@@ -8,34 +14,78 @@
 }
 
 body{
-  min-height: 100vh;
+  margin: 0;
+  min-height: 100svh;
+  background: linear-gradient(rgb(183, 235, 255), rgb(255, 255, 255));
 }
 
 #app{
+  margin: 0;
+  min-height: 100svh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 #calc{
-  border: 1px solid black;
-  width: minmax(400px, 95vw);
+  background: rgb(0, 0, 0, .6);
+  padding: 1rem;
+  max-width: 95vw;
+  min-width: 25rem;
+  border-radius: var(--standard-border-radiux);
+  box-shadow: 1px 1px 100rem 5rem rgb(255, 255, 255);
+}
+
+.warn{
+  background-color: var(--warn);
+}
+
+.warn:hover{
+  background-color: var(--warn-hover);
+}
+
+.accent{
+  background-color: var(--accent);
+}
+
+.accent:hover{
+  background-color: var(--accent-hover);
 }
 
 .display{
-  min-height: 4rem;
-  background: black;
+  height: 8rem;
+  background: rgb(29, 30, 43);
+  border-radius: var(--standard-border-radiux);
 }
 
 .calc-buttons{
   display: grid;
+  margin-top: calc(var(--standard-gap) * 2);
+  gap: var(--standard-gap);
   grid-template-columns: repeat(4, 1fr);
+}
+
+button{
+  color: #f0f0f0;
+}
+
+button{
+  border-radius: var(--standard-border-radiux);
+  font-size: 1.5rem;
+  min-height: 4rem;
+  min-width: 4rem;
+  border: none;
+  font-weight: 700;
+  background:rgb(44, 98, 100);
+  border: 2px solid rgba(0,0,0, 0.3);
+}
+
+button:hover{
+  cursor: pointer;
+  background:rgb(92, 143, 160);
+  border: solid rgba(255, 255, 255, .5);
 }
 
 .span-2{
   grid-column: span 2;
-}
-
-@media (prefers-color-scheme: dark) {
-
 }
