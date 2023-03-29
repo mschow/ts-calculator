@@ -18,6 +18,7 @@ body{
   margin: 0;
   min-height: 100svh;
   background: linear-gradient(rgb(183, 235, 255), rgb(255, 255, 255));
+  color: #f0f0f0;
 }
 
 #app{
@@ -57,6 +58,15 @@ body{
   height: 8rem;
   background: rgb(29, 30, 43);
   border-radius: var(--standard-border-radiux);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.current-operand{
+  font-size: 3rem;
 }
 
 #calc-buttons{
