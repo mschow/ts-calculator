@@ -1,0 +1,12 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* color-scheme: light dark; */
+}
+
+h1{
+  color: red;
+}
+
+@media (prefers-color-scheme: dark) {
+
+}
