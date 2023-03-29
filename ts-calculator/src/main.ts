@@ -18,16 +18,16 @@ export class Main {
       const element: HTMLElement = <HTMLElement> event.target;
       switch(<Operations> element.dataset['operation']){
         case Operations.ADD:
-          this.calcAdd(element.innerText);
+          this.calcAdd();
           break;
         case Operations.SUBTRACT:
-          this.calcSubtract(element.innerText);
+          this.calcSubtract();
           break;
         case Operations.MULTIPLY:
-          this.calcMultiply(element.innerText);
+          this.calcMultiply();
           break;
         case Operations.DIVIDE:
-          this.calcDivide(element.innerText);
+          this.calcDivide();
           break;
         case Operations.CLEAR:
           this.calcClear();
@@ -42,33 +42,60 @@ export class Main {
     })
   }
   
-  private calcAdd(value: string): void {}
-  
-  private calcSubtract(value: string): void {}
-  
-  private calcMultiply(value: string): void {}
-  
-  private calcDivide(value: string): void {}
-  
-  private calcClear(): void {}
-  
-  private calcDelete(): void {}
-  
-  private calcAppend(value: string): void {
-    this.assignCurrentOperand(value);
+  private calcAdd(): void {
+    console.log("Add");
+    const calculated: number = this.getNumberFromCurrentOperand() + this.getNumberFromPreviousOperand();
+    this.setCurrentOperandToPrevious('+');
+    this.assignCurrentOperand(calculated.toString());
   }
   
+  private calcSubtract(): void {
+    this.setCurrentOperandToPrevious('-');
+  }
+  
+  private calcMultiply(): void {
+    this.setCurrentOperandToPrevious('*');
+  }
+  
+  private calcDivide(): void {
+    this.setCurrentOperandToPrevious('/');
+  }
+  
+  private calcClear(): void {
+    this.assignCurrentOperand('');
+    this.assignPreviousOperand('');
+  }
+  
+  private calcDelete(): void {
+    const currentValue:string = this.calculatorDOM.currentOperand.innerText;
+    this.assignCurrentOperand(currentValue.substring(0, currentValue.length - 1));
+  }
+  
+  private calcAppend(value: string): void {
+    const currentValue:string = this.calculatorDOM.currentOperand.innerText;
+    this.assignCurrentOperand(currentValue + value);
+  }
+
+  private getNumberFromPreviousOperand():number{
+    const previousNumber:number = parseInt(this.calculatorDOM.previousOperand.innerText);
+    return isNaN(previousNumber) ? 0 : previousNumber;
+  }
+
   private getNumberFromCurrentOperand():number{
-    return parseInt(this.calculatorDOM.currentOperand.innerText);
+    const currentNumber:number = parseInt(this.calculatorDOM.currentOperand.innerText);
+    return isNaN(currentNumber) ? 0 : currentNumber;
   }
   
   private assignCurrentOperand(value: string): void{
     this.calculatorDOM.currentOperand.innerText = value;
   };
   
-  private setCurrentOperandToPrevious(endingCharacter: '+' | '-' | '%' | '*' | '' = ''): void {
-    // const currentOperandElem:HTMLElement = <HTMLElement> document.querySelector('.current-operand');
-    // const previousOperand
+  private setCurrentOperandToPrevious(endingCharacter: '+' | '-' | '/' | '*' | null = null): void {
+    this.assignPreviousOperand(this.calculatorDOM.currentOperand.innerText + (endingCharacter ? ` ${endingCharacter}` : ''));
+  }
+
+  private assignPreviousOperand(value: string):void{
+    this.calculatorDOM.previousOperand.innerText = value;
   }
 }
 
