@@ -3,8 +3,37 @@
   /* color-scheme: light dark; */
 }
 
-h1{
-  color: red;
+*, ::before, ::after{
+  box-sizing: border-box;
+}
+
+body{
+  min-height: 100vh;
+}
+
+#app{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#calc{
+  border: 1px solid black;
+  width: minmax(400px, 95vw);
+}
+
+.display{
+  min-height: 4rem;
+  background: black;
+}
+
+.calc-buttons{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.span-2{
+  grid-column: span 2;
 }
 
 @media (prefers-color-scheme: dark) {
