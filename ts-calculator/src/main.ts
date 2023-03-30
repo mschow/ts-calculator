@@ -5,9 +5,15 @@ import { CalculatorDom } from './calculator-dom.model';
 export class Main {
   private readonly calculatorDOM: CalculatorDom = {
     buttonContainer: <HTMLElement> document.getElementById('calc-buttons'),
-    currentOperand: <HTMLElement> document.querySelector('.current-operand'),
-    previousOperand: <HTMLElement> document.querySelector('.previous-operand'),
+    currentValue: <HTMLElement> document.querySelector('.current-value'),
+    previousValue: <HTMLElement> document.querySelector('.previous-value'),
   }
+
+  private currentTotal: number = 0;
+  private finalEquation: string = '';
+  private currentOperation: Operations | null = null;
+  private leftOperator: string = '';
+  private rightOperator: string = '';
 
   constructor(){
     this.assignEventListeners();
@@ -16,86 +22,135 @@ export class Main {
   private assignEventListeners(): void{
     this.calculatorDOM.buttonContainer?.addEventListener('click', (event)=>{
       const element: HTMLElement = <HTMLElement> event.target;
-      switch(<Operations> element.dataset['operation']){
+      const operation: Operations = <Operations> element.closest('button')?.dataset['operation']
+      switch(operation){
         case Operations.ADD:
-          this.calcAdd();
-          break;
         case Operations.SUBTRACT:
-          this.calcSubtract();
-          break;
         case Operations.MULTIPLY:
-          this.calcMultiply();
-          break;
         case Operations.DIVIDE:
-          this.calcDivide();
+          this.operandClick(operation)
           break;
         case Operations.CLEAR:
-          this.calcClear();
+          this.calcClearClick();
           break;
         case Operations.DELETE:
-          this.calcDelete();
+          this.calcDeleteClick();
           break;
         case Operations.APPEND_NUMBER:
-          this.calcAppend(element.innerText);
+          this.calcNumberClick(element.innerText);
           break;
+        case Operations.CALCULATE:
+          this.calculateFinal();
       }
     })
   }
   
-  private calcAdd(): void {
-    console.log("Add");
-    const calculated: number = this.getNumberFromCurrentOperand() + this.getNumberFromPreviousOperand();
-    this.setCurrentOperandToPrevious('+');
-    this.assignCurrentOperand(calculated.toString());
+  private operandClick(operationType: Operations): void{
+    this.currentOperation = operationType;
+    if(this.rightOperator){
+      this.calculateTotal();
+      this.rightOperator = '';
+      this.assignPreviousValue(this.leftOperator);
+      this.assignCurrentValue(this.leftOperator);
+      this.currentOperation = null;
+    }
   }
   
-  private calcSubtract(): void {
-    this.setCurrentOperandToPrevious('-');
+  private calcClearClick(): void {
+    this.currentTotal = 0;
+    this.assignCurrentValue('');
+    this.assignPreviousValue('');
+    this.currentOperation = null;
+    this.leftOperator = '';
+    this.rightOperator = '';
+    this.finalEquation = '';
   }
   
-  private calcMultiply(): void {
-    this.setCurrentOperandToPrevious('*');
+  private calcDeleteClick(): void {
+    const currentValue:string = this.calculatorDOM.currentValue.innerText;
+    this.assignCurrentValue(currentValue.substring(0, currentValue.length - 1));
   }
   
-  private calcDivide(): void {
-    this.setCurrentOperandToPrevious('/');
+  private calcNumberClick(value: string): void {
+    this.rightOperator += value;
+    this.finalEquation += value;
+    this.assignCurrentValue(this.rightOperator);
   }
   
-  private calcClear(): void {
-    this.assignCurrentOperand('');
-    this.assignPreviousOperand('');
-  }
-  
-  private calcDelete(): void {
-    const currentValue:string = this.calculatorDOM.currentOperand.innerText;
-    this.assignCurrentOperand(currentValue.substring(0, currentValue.length - 1));
-  }
-  
-  private calcAppend(value: string): void {
-    const currentValue:string = this.calculatorDOM.currentOperand.innerText;
-    this.assignCurrentOperand(currentValue + value);
-  }
-
-  private getNumberFromPreviousOperand():number{
-    const previousNumber:number = parseInt(this.calculatorDOM.previousOperand.innerText);
-    return isNaN(previousNumber) ? 0 : previousNumber;
-  }
-
-  private getNumberFromCurrentOperand():number{
-    const currentNumber:number = parseInt(this.calculatorDOM.currentOperand.innerText);
-    return isNaN(currentNumber) ? 0 : currentNumber;
-  }
-  
-  private assignCurrentOperand(value: string): void{
-    this.calculatorDOM.currentOperand.innerText = value;
+  private assignCurrentValue(value: string): void {
+    this.calculatorDOM.currentValue.innerText = value;
   };
-  
-  private setCurrentOperandToPrevious(endingCharacter: '+' | '-' | '/' | '*' | null = null): void {
-    this.assignPreviousOperand(this.calculatorDOM.currentOperand.innerText + (endingCharacter ? ` ${endingCharacter}` : ''));
+
+  private assignPreviousValue(value: string): void {
+    this.calculatorDOM.previousValue.innerHTML = "";
+    if(!value){
+      return;
+    }
+    const lefthandNumber: HTMLElement = document.createElement('span');
+    lefthandNumber.innerText = value;
+    this.calculatorDOM.previousValue.appendChild(lefthandNumber);
+    this.calculatorDOM.previousValue.appendChild(this.getSymbolForCurrentOperation());
   }
 
-  private assignPreviousOperand(value: string):void{
-    this.calculatorDOM.previousOperand.innerText = value;
+  private getSymbolForCurrentOperation(): HTMLElement{
+    const symbol: HTMLElement = document.createElement('i');
+    symbol.classList.add('fa');
+
+    switch(this.currentOperation){
+      case Operations.ADD:
+        symbol.classList.add('fa-plus');
+        break;
+      case Operations.SUBTRACT:
+        symbol.classList.add('fa-minus');
+        break;
+      case Operations.MULTIPLY:
+        symbol.classList.add('fa-times');
+        break;
+      case Operations.DIVIDE:
+        symbol.classList.add('fa-divide');
+        break;
+    }
+
+    return symbol;
+  }
+
+  private calculateTotal(): void{
+    if(this.currentOperation && this.leftOperator){
+      const left: number = parseFloat(this.leftOperator) || 0;
+      const right: number = parseFloat(this.rightOperator);
+      console.log(left, right);
+      switch(this.currentOperation){
+        case Operations.ADD:
+          this.currentTotal = left + right;
+          break;
+        case Operations.SUBTRACT:
+          this.currentTotal = left - right;
+          break;
+        case Operations.MULTIPLY:
+          this.currentTotal = left * right;
+          break;
+        case Operations.DIVIDE:
+          if(right === 0){
+            this.calcClearClick();
+            this.assignCurrentValue("Cannot divide by 0.");
+          } else {
+            this.currentTotal = left / right;
+          }
+          break; 
+      }
+      this.assignCurrentValue(this.currentTotal.toString())
+      this.leftOperator = this.currentTotal.toString();
+    } else if(this.currentOperation && !this.leftOperator){
+      this.leftOperator = this.rightOperator.toString();
+    }
+  }
+
+  private calculateFinal(): void {
+    if(this.currentOperation){
+      this.assignPreviousValue(this.finalEquation.toString() + ' =');
+      this.calculateTotal();
+      this.finalEquation = '';
+    }
   }
 }
 

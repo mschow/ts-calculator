@@ -6,4 +6,5 @@ export enum Operations{
     ADD = 'ADD',
     SUBTRACT = 'SUBTRACT',
     APPEND_NUMBER = 'APPEND_NUMBER',
+    CALCULATE = 'CALCULATE',
 }
