@@ -65,7 +65,13 @@ body{
   padding: 1.5rem;
 }
 
-.current-operand{
+.display i{
+  color: var(--accent);
+  font-size: .7rem;
+  margin-left: .5rem;
+}
+
+.current-value{
   font-size: 3rem;
 }
 

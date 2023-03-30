@@ -3,34 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/ce2b08ccde.js" crossorigin="anonymous"></script>
     <title>Typescript Calculator</title>
   </head>
   <body>
     <div id="app">
       <div id="calc">
         <div class="display">
-          <div class="previous-operand"></div>
-          <div class="current-operand"></div>
+          <div class="previous-value"></div>
+          <div class="current-value"></div>
         </div>
         <div id="calc-buttons">
           <button data-operation="CLEAR" class="span-2 warn">CLEAR</button>
-          <button data-operation="DELETE" class="warn">DEL</button>
-          <button data-operation="DIVIDE" class="accent">/</button>
+          <button data-operation="DELETE" class="warn"><i class="fa fa-delete-left"></i></button>
+          <button data-operation="DIVIDE" class="accent"><i class="fa fa-divide"></i></button>
           <button data-operation="APPEND_NUMBER">7</button>
           <button data-operation="APPEND_NUMBER">8</button>
           <button data-operation="APPEND_NUMBER">9</button>
-          <button data-operation="MULTIPLY" class="accent">x</button>
+          <button data-operation="MULTIPLY" class="accent"><i class="fa fa-times"></i></button>
           <button data-operation="APPEND_NUMBER">4</button>
           <button data-operation="APPEND_NUMBER">5</button>
           <button data-operation="APPEND_NUMBER">6</button>
-          <button data-operation="SUBTRACT" class="accent">-</button>
+          <button data-operation="SUBTRACT" class="accent"><i class="fa fa-minus"></i></button>
           <button data-operation="APPEND_NUMBER">1</button>
           <button data-operation="APPEND_NUMBER">2</button>
           <button data-operation="APPEND_NUMBER">3</button>
-          <button data-operation="ADD" class="accent">+</button>
+          <button data-operation="ADD" class="accent"><i class="fa fa-plus"></i></button>
           <button data-operation="APPEND_NUMBER" class="span-2">0</button>
           <button data-operation="APPEND_NUMBER">.</button>
-          <button data-operation="CALCULATE" class="accent">=</button>
+          <button data-operation="CALCULATE" class="accent"><i class="fa fa-equals"></i></button>
         </div>
       </div>
     </div>
