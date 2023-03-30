@@ -46,14 +46,19 @@ export class Main {
   }
   
   private operandClick(operationType: Operations): void{
-    this.currentOperation = operationType;
-    if(this.rightOperator){
+    if(this.leftOperator && this.rightOperator && this.currentOperation){
       this.calculateTotal();
-      this.rightOperator = '';
-      this.assignPreviousValue(this.leftOperator);
-      this.assignCurrentValue(this.leftOperator);
-      this.currentOperation = null;
+      this.currentOperation = operationType;
+      this.assignPreviousValue(this.currentTotal.toString());
+    } else if(this.rightOperator){
+      this.currentOperation = operationType;
+      this.leftOperator = this.rightOperator;
+      this.currentTotal = parseInt(this.leftOperator);
+      this.assignPreviousValue(this.currentTotal.toString());
     }
+    this.currentOperation = operationType;
+    this.assignPreviousValue(this.currentTotal.toString())
+    this.rightOperator = '';
   }
   
   private calcClearClick(): void {
@@ -109,6 +114,9 @@ export class Main {
       case Operations.DIVIDE:
         symbol.classList.add('fa-divide');
         break;
+      case Operations.CALCULATE:
+        symbol.classList.add('fa-equals');
+        break;
     }
 
     return symbol;
@@ -118,7 +126,6 @@ export class Main {
     if(this.currentOperation && this.leftOperator){
       const left: number = parseFloat(this.leftOperator) || 0;
       const right: number = parseFloat(this.rightOperator);
-      console.log(left, right);
       switch(this.currentOperation){
         case Operations.ADD:
           this.currentTotal = left + right;
@@ -146,11 +153,10 @@ export class Main {
   }
 
   private calculateFinal(): void {
-    if(this.currentOperation){
-      this.assignPreviousValue(this.finalEquation.toString() + ' =');
-      this.calculateTotal();
-      this.finalEquation = '';
-    }
+    this.calculateTotal();
+    this.currentOperation = Operations.CALCULATE;
+    this.assignPreviousValue(this.finalEquation.toString());
+    this.finalEquation = '';
   }
 }
 
