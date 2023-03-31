@@ -25,6 +25,41 @@ export class Main {
       const operation: Operations = <Operations> element.closest('button')?.dataset['operation']
       this.handleOperationEvent(operation, element.innerText);
     })
+
+    window.addEventListener('keydown', (event)=>{
+      this.handleKeyPress(event);
+    })
+  }
+
+  private handleKeyPress(event: KeyboardEvent){
+    console.log(event);
+    if(!isNaN(parseInt(event.key))){
+      this.handleOperationEvent(Operations.APPEND_NUMBER, event.key);
+    }
+
+    switch(event.key){
+      case '+':
+        this.handleOperationEvent(Operations.ADD);
+        break;
+      case '-':
+        this.handleOperationEvent(Operations.SUBTRACT);
+        break;
+      case '*':
+        this.handleOperationEvent(Operations.MULTIPLY);
+        break;
+      case '/':
+        this.handleOperationEvent(Operations.DIVIDE);
+        break;
+      case '.':
+        this.handleOperationEvent(Operations.APPEND_POINT);
+        break;
+      case 'Enter':
+        this.handleOperationEvent(Operations.CALCULATE);
+        break; 
+      case 'Backspace':
+        this.handleOperationEvent(Operations.DELETE);
+        break;
+    }
   }
 
   private handleOperationEvent(operation: Operations, buttonText: string = ''){
