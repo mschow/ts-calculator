@@ -23,32 +23,36 @@ export class Main {
     this.calculatorDOM.buttonContainer?.addEventListener('click', (event)=>{
       const element: HTMLElement = <HTMLElement> event.target;
       const operation: Operations = <Operations> element.closest('button')?.dataset['operation']
-      switch(operation){
-        case Operations.ADD:
-        case Operations.SUBTRACT:
-        case Operations.MULTIPLY:
-        case Operations.DIVIDE:
-          this.operandClick(operation)
-          break;
-        case Operations.CLEAR:
-          this.calcClearClick();
-          break;
-        case Operations.DELETE:
-          this.calcDeleteClick();
-          break;
-        case Operations.APPEND_NUMBER:
-          this.calcNumberClick(element.innerText);
-          break;
-        case Operations.APPEND_POINT:
-          this.calcPointClick();
-          break;
-        case Operations.CALCULATE:
-          this.calculateFinal();
-      }
+      this.handleOperationEvent(operation, element.innerText);
     })
   }
+
+  private handleOperationEvent(operation: Operations, buttonText: string = ''){
+    switch(operation){
+      case Operations.ADD:
+      case Operations.SUBTRACT:
+      case Operations.MULTIPLY:
+      case Operations.DIVIDE:
+        this.operandSelect(operation)
+        break;
+      case Operations.CLEAR:
+        this.calcClearSelect();
+        break;
+      case Operations.DELETE:
+        this.calcDeleteSelect();
+        break;
+      case Operations.APPEND_NUMBER:
+        this.calcNumberSelect(buttonText);
+        break;
+      case Operations.APPEND_POINT:
+        this.calcPointSelect();
+        break;
+      case Operations.CALCULATE:
+        this.calculateFinal();
+    }
+  }
   
-  private operandClick(operationType: Operations): void{
+  private operandSelect(operationType: Operations): void{
     if(this.leftOperator && this.rightOperator && this.currentOperation){
       this.calculateTotal();
       this.currentOperation = operationType;
@@ -64,7 +68,7 @@ export class Main {
     this.rightOperator = '';
   }
   
-  private calcClearClick(): void {
+  private calcClearSelect(): void {
     this.currentTotal = 0;
     this.assignCurrentValue('');
     this.assignPreviousValue('');
@@ -73,20 +77,20 @@ export class Main {
     this.rightOperator = '';
   }
   
-  private calcDeleteClick(): void {
+  private calcDeleteSelect(): void {
     if(!this.rightOperator) return;
     this.rightOperator = this.rightOperator.substring(0, this.rightOperator.length - 1);
     this.assignCurrentValue(this.rightOperator);
   }
   
-  private calcNumberClick(value: string): void {
+  private calcNumberSelect(value: string): void {
     if(this.rightOperator.length >= this.MAX_CHARACTERS) return;
     this.rightOperator = this.rightOperator === '0' ? '': this.rightOperator;
     this.rightOperator += value;
     this.assignCurrentValue(this.rightOperator);
   }
   
-  private calcPointClick():void{
+  private calcPointSelect():void{
     if(this.rightOperator.includes('.')) return;
     this.rightOperator+= '.';
     this.assignCurrentValue(this.rightOperator);
@@ -156,7 +160,7 @@ export class Main {
           break;
         case Operations.DIVIDE:
           if(right === 0){
-            this.calcClearClick();
+            this.calcClearSelect();
             this.assignCurrentValue("Cannot divide by 0.");
             return;
           } else {
