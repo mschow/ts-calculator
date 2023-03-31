@@ -12,8 +12,8 @@ export class Main {
 
   private currentTotal: number = 0;
   private currentOperation: Operations | null = null;
-  private leftOperator: string = '';
-  private rightOperator: string = '';
+  private leftOperator: string = '0';
+  private rightOperator: string = '0';
 
   constructor(){
     this.assignEventListeners();
@@ -59,7 +59,6 @@ export class Main {
       this.currentTotal = parseInt(this.leftOperator);
       this.assignPreviousValue(this.currentTotal.toString());
     }
-    // this.leftOperator = '0';
     this.currentOperation = operationType;
     this.assignPreviousValue(this.currentTotal.toString())
     this.rightOperator = '';
@@ -70,7 +69,7 @@ export class Main {
     this.assignCurrentValue('');
     this.assignPreviousValue('');
     this.currentOperation = null;
-    this.leftOperator = '';
+    this.leftOperator = '0';
     this.rightOperator = '';
   }
   
@@ -100,11 +99,15 @@ export class Main {
   private assignPreviousValue(value: string, isFinalAssignment: boolean = false): void {
     this.calculatorDOM.previousValue.innerHTML = "";
     if(!value) return;
+
+    //If the trailing character is a period, remove it.
     if(value[value.length - 1] === '.') value = value.substring(0, value.length - 1);
     const lefthandNumber: HTMLElement = document.createElement('span');
     lefthandNumber.innerText = value;
     this.calculatorDOM.previousValue.appendChild(lefthandNumber);
     this.calculatorDOM.previousValue.appendChild(this.getSymbolForCurrentOperation());
+
+    //If this is the final calculation, add the right operator and an equals symbol.
     if(isFinalAssignment){
       const righthandNumber: HTMLElement = document.createElement('span');
       righthandNumber.innerText = this.rightOperator;
@@ -172,9 +175,8 @@ export class Main {
     this.rightOperator = this.rightOperator || '0';
     this.assignPreviousValue(this.leftOperator, true);
     this.calculateTotal();
-    this.currentTotal = 0;
     this.currentOperation = null;
-    this.leftOperator = '';
+    this.leftOperator = '0';
     this.rightOperator = '';
   }
 }
