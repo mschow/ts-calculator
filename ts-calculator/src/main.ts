@@ -27,12 +27,12 @@ export class Main {
     })
 
     window.addEventListener('keydown', (event)=>{
+      if(event.repeat) return;
       this.handleKeyPress(event);
     })
   }
 
   private handleKeyPress(event: KeyboardEvent){
-    console.log(event);
     if(!isNaN(parseInt(event.key))){
       this.handleOperationEvent(Operations.APPEND_NUMBER, event.key);
     }
@@ -63,6 +63,7 @@ export class Main {
   }
 
   private handleOperationEvent(operation: Operations, buttonText: string = ''){
+    console.log(operation);
     switch(operation){
       case Operations.ADD:
       case Operations.SUBTRACT:
