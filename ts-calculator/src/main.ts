@@ -3,6 +3,7 @@ import { Operations } from './operations.enum'
 import { CalculatorDom } from './calculator-dom.model';
 
 export class Main {
+  private readonly MAX_CHARACTERS: number = 15;
   private readonly calculatorDOM: CalculatorDom = {
     buttonContainer: <HTMLElement> document.getElementById('calc-buttons'),
     currentValue: <HTMLElement> document.querySelector('.current-value'),
@@ -10,7 +11,6 @@ export class Main {
   }
 
   private currentTotal: number = 0;
-  private finalEquation: string = '';
   private currentOperation: Operations | null = null;
   private leftOperator: string = '';
   private rightOperator: string = '';
@@ -39,6 +39,9 @@ export class Main {
         case Operations.APPEND_NUMBER:
           this.calcNumberClick(element.innerText);
           break;
+        case Operations.APPEND_POINT:
+          this.calcPointClick();
+          break;
         case Operations.CALCULATE:
           this.calculateFinal();
       }
@@ -56,6 +59,7 @@ export class Main {
       this.currentTotal = parseInt(this.leftOperator);
       this.assignPreviousValue(this.currentTotal.toString());
     }
+    // this.leftOperator = '0';
     this.currentOperation = operationType;
     this.assignPreviousValue(this.currentTotal.toString())
     this.rightOperator = '';
@@ -68,33 +72,47 @@ export class Main {
     this.currentOperation = null;
     this.leftOperator = '';
     this.rightOperator = '';
-    this.finalEquation = '';
   }
   
   private calcDeleteClick(): void {
-    const currentValue:string = this.calculatorDOM.currentValue.innerText;
-    this.assignCurrentValue(currentValue.substring(0, currentValue.length - 1));
-  }
-  
-  private calcNumberClick(value: string): void {
-    this.rightOperator += value;
-    this.finalEquation += value;
+    if(!this.rightOperator) return;
+    this.rightOperator = this.rightOperator.substring(0, this.rightOperator.length - 1);
     this.assignCurrentValue(this.rightOperator);
   }
   
+  private calcNumberClick(value: string): void {
+    if(this.rightOperator.length >= this.MAX_CHARACTERS) return;
+    this.rightOperator = this.rightOperator === '0' ? '': this.rightOperator;
+    this.rightOperator += value;
+    this.assignCurrentValue(this.rightOperator);
+  }
+  
+  private calcPointClick():void{
+    if(this.rightOperator.includes('.')) return;
+    this.rightOperator+= '.';
+    this.assignCurrentValue(this.rightOperator);
+  }
+
   private assignCurrentValue(value: string): void {
     this.calculatorDOM.currentValue.innerText = value;
   };
 
-  private assignPreviousValue(value: string): void {
+  private assignPreviousValue(value: string, isFinalAssignment: boolean = false): void {
     this.calculatorDOM.previousValue.innerHTML = "";
-    if(!value){
-      return;
-    }
+    if(!value) return;
+    if(value[value.length - 1] === '.') value = value.substring(0, value.length - 1);
     const lefthandNumber: HTMLElement = document.createElement('span');
     lefthandNumber.innerText = value;
     this.calculatorDOM.previousValue.appendChild(lefthandNumber);
     this.calculatorDOM.previousValue.appendChild(this.getSymbolForCurrentOperation());
+    if(isFinalAssignment){
+      const righthandNumber: HTMLElement = document.createElement('span');
+      righthandNumber.innerText = this.rightOperator;
+      const equalsSymbol: HTMLElement = document.createElement('i');
+      equalsSymbol.className = 'fa fa-equals';
+      this.calculatorDOM.previousValue.appendChild(righthandNumber);
+      this.calculatorDOM.previousValue.appendChild(equalsSymbol);
+    }
   }
 
   private getSymbolForCurrentOperation(): HTMLElement{
@@ -113,9 +131,6 @@ export class Main {
         break;
       case Operations.DIVIDE:
         symbol.classList.add('fa-divide');
-        break;
-      case Operations.CALCULATE:
-        symbol.classList.add('fa-equals');
         break;
     }
 
@@ -140,6 +155,7 @@ export class Main {
           if(right === 0){
             this.calcClearClick();
             this.assignCurrentValue("Cannot divide by 0.");
+            return;
           } else {
             this.currentTotal = left / right;
           }
@@ -153,10 +169,13 @@ export class Main {
   }
 
   private calculateFinal(): void {
+    this.rightOperator = this.rightOperator || '0';
+    this.assignPreviousValue(this.leftOperator, true);
     this.calculateTotal();
-    this.currentOperation = Operations.CALCULATE;
-    this.assignPreviousValue(this.finalEquation.toString());
-    this.finalEquation = '';
+    this.currentTotal = 0;
+    this.currentOperation = null;
+    this.leftOperator = '';
+    this.rightOperator = '';
   }
 }
 

@@ -55,7 +55,7 @@ body{
 }
 
 .display{
-  height: 8rem;
+  height: 6rem;
   background: rgb(29, 30, 43);
   border-radius: var(--standard-border-radiux);
   display: flex;
@@ -71,8 +71,12 @@ body{
   margin-left: .5rem;
 }
 
+.display span{
+  margin-left: .5rem;
+}
+
 .current-value{
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 #calc-buttons{
