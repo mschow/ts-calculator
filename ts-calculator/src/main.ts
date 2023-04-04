@@ -10,6 +10,7 @@ export class Main {
     previousValue: <HTMLElement> document.querySelector('.previous-value'),
   }
 
+  private firstPressAfterEnter:boolean = true;
   private currentTotal: number = 0;
   private currentOperation: Operations | null = null;
   private leftOperator: string = '0';
@@ -27,6 +28,7 @@ export class Main {
     })
 
     window.addEventListener('keydown', (event)=>{
+      event.preventDefault();
       if(event.repeat) return;
       this.handleKeyPress(event);
     })
@@ -63,7 +65,6 @@ export class Main {
   }
 
   private handleOperationEvent(operation: Operations, buttonText: string = ''){
-    console.log(operation);
     switch(operation){
       case Operations.ADD:
       case Operations.SUBTRACT:
@@ -85,10 +86,12 @@ export class Main {
         break;
       case Operations.CALCULATE:
         this.calculateFinal();
+        break;
     }
   }
   
   private operandSelect(operationType: Operations): void{
+    if(this.firstPressAfterEnter) this.leftOperator = this.calculatorDOM.currentValue.innerText;
     if(this.leftOperator && this.rightOperator && this.currentOperation){
       this.calculateTotal();
       this.currentOperation = operationType;
@@ -102,6 +105,7 @@ export class Main {
     this.currentOperation = operationType;
     this.assignPreviousValue(this.currentTotal.toString())
     this.rightOperator = '';
+    this.firstPressAfterEnter = false
   }
   
   private calcClearSelect(): void {
@@ -111,12 +115,15 @@ export class Main {
     this.currentOperation = null;
     this.leftOperator = '0';
     this.rightOperator = '';
+    this.firstPressAfterEnter = false
   }
   
   private calcDeleteSelect(): void {
+    if(this.firstPressAfterEnter) this.calcClearSelect();
     if(!this.rightOperator) return;
     this.rightOperator = this.rightOperator.substring(0, this.rightOperator.length - 1);
     this.assignCurrentValue(this.rightOperator);
+    this.firstPressAfterEnter = false
   }
   
   private calcNumberSelect(value: string): void {
@@ -124,12 +131,14 @@ export class Main {
     this.rightOperator = this.rightOperator === '0' ? '': this.rightOperator;
     this.rightOperator += value;
     this.assignCurrentValue(this.rightOperator);
+    this.firstPressAfterEnter = false
   }
   
   private calcPointSelect():void{
     if(this.rightOperator.includes('.')) return;
     this.rightOperator+= '.';
     this.assignCurrentValue(this.rightOperator);
+    this.firstPressAfterEnter = false;
   }
 
   private assignCurrentValue(value: string): void {
@@ -142,6 +151,7 @@ export class Main {
 
     //If the trailing character is a period, remove it.
     if(value[value.length - 1] === '.') value = value.substring(0, value.length - 1);
+
     const lefthandNumber: HTMLElement = document.createElement('span');
     lefthandNumber.innerText = value;
     this.calculatorDOM.previousValue.appendChild(lefthandNumber);
@@ -212,12 +222,14 @@ export class Main {
   }
 
   private calculateFinal(): void {
+    if(this.firstPressAfterEnter || !this.currentOperation) return;
     this.rightOperator = this.rightOperator || '0';
     this.assignPreviousValue(this.leftOperator, true);
     this.calculateTotal();
     this.currentOperation = null;
     this.leftOperator = '0';
     this.rightOperator = '';
+    this.firstPressAfterEnter = true;
   }
 }
 
