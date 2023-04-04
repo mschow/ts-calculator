@@ -1,5 +1,5 @@
 export interface CalculatorDom {
-    buttonContainer: HTMLElement;
-    currentValue: HTMLElement;
-    previousValue: HTMLElement;
+  buttonContainer: HTMLElement;
+  currentValue: HTMLElement;
+  previousValue: HTMLElement;
 }
