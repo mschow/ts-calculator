@@ -1,2 +1,3 @@
 */node_modules
+*/dist
 ts-calculator/src/vite-env.d.ts

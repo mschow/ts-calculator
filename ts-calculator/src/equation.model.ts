@@ -1,4 +1,4 @@
-import { Operations } from "./operations.enum";
+import { Operations } from './operations.enum';
 
 export interface Equation {
     currentTotal: number;

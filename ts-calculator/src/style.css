@@ -1,112 +1,114 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
 
 :root {
-  --standard-gap: .4rem;
-  --standard-border-radiux: 10px;
-  --warn: rgb(158, 55, 37);
-  --warn-hover: rgb(224, 108, 88);
-  --accent: rgb(196, 150, 36);
-  --accent-hover: rgb(226, 185, 81);
+    --standard-gap: 0.4rem;
+    --standard-border-radiux: 10px;
+    --warn: rgb(158, 55, 37);
+    --warn-hover: rgb(224, 108, 88);
+    --accent: rgb(196, 150, 36);
+    --accent-hover: rgb(226, 185, 81);
 }
 
-*, ::before, ::after{
-  box-sizing: border-box;
+*,
+::before,
+::after {
+    box-sizing: border-box;
 }
 
-body{
-  font-family: 'Roboto Condensed', sans-serif;
-  margin: 0;
-  min-height: 100svh;
-  background: linear-gradient(rgb(183, 235, 255), rgb(255, 255, 255));
-  color: #f0f0f0;
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    margin: 0;
+    min-height: 100svh;
+    background: linear-gradient(rgb(183, 235, 255), rgb(255, 255, 255));
+    color: #f0f0f0;
 }
 
-#app{
-  margin: 0;
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#app {
+    margin: 0;
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#calc{
-  background: rgb(0, 0, 0, .6);
-  padding: 1rem;
-  max-width: 95vw;
-  min-width: 25rem;
-  border-radius: var(--standard-border-radiux);
-  box-shadow: 1px 1px 100rem 5rem rgb(255, 255, 255);
+#calc {
+    background: rgb(0, 0, 0, 0.6);
+    padding: 1rem;
+    max-width: 95vw;
+    min-width: 25rem;
+    border-radius: var(--standard-border-radiux);
+    box-shadow: 1px 1px 100rem 5rem rgb(255, 255, 255);
 }
 
-.warn{
-  background-color: var(--warn);
+.warn {
+    background-color: var(--warn);
 }
 
-.warn:hover{
-  background-color: var(--warn-hover);
+.warn:hover {
+    background-color: var(--warn-hover);
 }
 
-.accent{
-  background-color: var(--accent);
+.accent {
+    background-color: var(--accent);
 }
 
-.accent:hover{
-  background-color: var(--accent-hover);
+.accent:hover {
+    background-color: var(--accent-hover);
 }
 
-.display{
-  height: 6rem;
-  background: rgb(29, 30, 43);
-  border-radius: var(--standard-border-radiux);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 1.5rem;
+.display {
+    height: 6rem;
+    background: rgb(29, 30, 43);
+    border-radius: var(--standard-border-radiux);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 1.5rem;
 }
 
-.display i{
-  color: var(--accent);
-  font-size: .7rem;
-  margin-left: .5rem;
+.display i {
+    color: var(--accent);
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
 }
 
-.display span{
-  margin-left: .5rem;
+.display span {
+    margin-left: 0.5rem;
 }
 
-.current-value{
-  font-size: 2rem;
+.current-value {
+    font-size: 2rem;
 }
 
-#calc-buttons{
-  display: grid;
-  margin-top: calc(var(--standard-gap) * 2);
-  gap: var(--standard-gap);
-  grid-template-columns: repeat(4, 1fr);
+#calc-buttons {
+    display: grid;
+    margin-top: calc(var(--standard-gap) * 2);
+    gap: var(--standard-gap);
+    grid-template-columns: repeat(4, 1fr);
 }
 
-button{
-  color: #f0f0f0;
+button {
+    color: #f0f0f0;
 }
 
-button{
-  border-radius: var(--standard-border-radiux);
-  font-size: 1.5rem;
-  min-height: 4rem;
-  min-width: 4rem;
-  border: none;
-  font-weight: 600;
-  background:rgb(44, 98, 100);
-  border: 2px solid rgba(0,0,0, 0.3);
+button {
+    border-radius: var(--standard-border-radiux);
+    font-size: 1.5rem;
+    min-height: 4rem;
+    min-width: 4rem;
+    border: none;
+    font-weight: 600;
+    background: rgb(44, 98, 100);
+    border: 2px solid rgba(0, 0, 0, 0.3);
 }
 
-button:hover{
-  cursor: pointer;
-  background:rgb(92, 143, 160);
-  border: solid rgba(255, 255, 255, .5);
+button:hover {
+    cursor: pointer;
+    background: rgb(92, 143, 160);
+    border: solid rgba(255, 255, 255, 0.5);
 }
 
-.span-2{
-  grid-column: span 2;
+.span-2 {
+    grid-column: span 2;
 }

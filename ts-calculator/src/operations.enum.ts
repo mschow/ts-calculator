@@ -1,4 +1,4 @@
-export enum Operations{
+export enum Operations {
     CLEAR = 'CLEAR',
     DELETE = 'DELETE',
     MULTIPLY = 'MULTIPLY',
