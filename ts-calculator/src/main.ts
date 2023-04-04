@@ -1,6 +1,7 @@
 import './style.css'
 import { Operations } from './operations.enum'
 import { CalculatorDom } from './calculator-dom.model';
+import { Equation } from './equation.model';
 
 export class Main {
   private readonly MAX_CHARACTERS: number = 15;
@@ -11,10 +12,13 @@ export class Main {
   }
 
   private firstPressAfterEnter:boolean = true;
-  private currentTotal: number = 0;
-  private currentOperation: Operations | null = null;
-  private leftOperator: string = '0';
-  private rightOperator: string = '0';
+  private activeEquation: Equation = {
+    currentTotal: 0,
+    currentOperation: null,
+    leftOperator: '0',
+    rightOperator: '0',
+  }
+
 
   constructor(){
     this.assignEventListeners();
@@ -91,53 +95,53 @@ export class Main {
   }
   
   private operandSelect(operationType: Operations): void{
-    if(this.firstPressAfterEnter) this.leftOperator = this.calculatorDOM.currentValue.innerText;
-    if(this.leftOperator && this.rightOperator && this.currentOperation){
+    if(this.firstPressAfterEnter) this.activeEquation.leftOperator = this.calculatorDOM.currentValue.innerText;
+    if(this.activeEquation.leftOperator && this.activeEquation.rightOperator && this.activeEquation.currentOperation){
       this.calculateTotal();
-      this.currentOperation = operationType;
-      this.assignPreviousValue(this.currentTotal.toString());
-    } else if(this.rightOperator){
-      this.currentOperation = operationType;
-      this.leftOperator = this.rightOperator;
-      this.currentTotal = parseInt(this.leftOperator);
-      this.assignPreviousValue(this.currentTotal.toString());
+      this.activeEquation.currentOperation = operationType;
+      this.assignPreviousValue(this.activeEquation.currentTotal.toString());
+    } else if(this.activeEquation.rightOperator){
+      this.activeEquation.currentOperation = operationType;
+      this.activeEquation.leftOperator = this.activeEquation.rightOperator;
+      this.activeEquation.currentTotal = parseInt(this.activeEquation.leftOperator);
+      this.assignPreviousValue(this.activeEquation.currentTotal.toString());
     }
-    this.currentOperation = operationType;
-    this.assignPreviousValue(this.currentTotal.toString())
-    this.rightOperator = '';
+    this.activeEquation.currentOperation = operationType;
+    this.assignPreviousValue(this.activeEquation.currentTotal.toString())
+    this.activeEquation.rightOperator = '';
     this.firstPressAfterEnter = false
   }
   
   private calcClearSelect(): void {
-    this.currentTotal = 0;
+    this.activeEquation.currentTotal = 0;
     this.assignCurrentValue('');
     this.assignPreviousValue('');
-    this.currentOperation = null;
-    this.leftOperator = '0';
-    this.rightOperator = '';
+    this.activeEquation.currentOperation = null;
+    this.activeEquation.leftOperator = '0';
+    this.activeEquation.rightOperator = '';
     this.firstPressAfterEnter = false
   }
   
   private calcDeleteSelect(): void {
     if(this.firstPressAfterEnter) this.calcClearSelect();
-    if(!this.rightOperator) return;
-    this.rightOperator = this.rightOperator.substring(0, this.rightOperator.length - 1);
-    this.assignCurrentValue(this.rightOperator);
+    if(!this.activeEquation.rightOperator) return;
+    this.activeEquation.rightOperator = this.activeEquation.rightOperator.substring(0, this.activeEquation.rightOperator.length - 1);
+    this.assignCurrentValue(this.activeEquation.rightOperator);
     this.firstPressAfterEnter = false
   }
   
   private calcNumberSelect(value: string): void {
-    if(this.rightOperator.length >= this.MAX_CHARACTERS) return;
-    this.rightOperator = this.rightOperator === '0' ? '': this.rightOperator;
-    this.rightOperator += value;
-    this.assignCurrentValue(this.rightOperator);
+    if(this.activeEquation.rightOperator.length >= this.MAX_CHARACTERS) return;
+    this.activeEquation.rightOperator = this.activeEquation.rightOperator === '0' ? '': this.activeEquation.rightOperator;
+    this.activeEquation.rightOperator += value;
+    this.assignCurrentValue(this.activeEquation.rightOperator);
     this.firstPressAfterEnter = false
   }
   
   private calcPointSelect():void{
-    if(this.rightOperator.includes('.')) return;
-    this.rightOperator+= '.';
-    this.assignCurrentValue(this.rightOperator);
+    if(this.activeEquation.rightOperator.includes('.')) return;
+    this.activeEquation.rightOperator+= '.';
+    this.assignCurrentValue(this.activeEquation.rightOperator);
     this.firstPressAfterEnter = false;
   }
 
@@ -160,7 +164,7 @@ export class Main {
     //If this is the final calculation, add the right operator and an equals symbol.
     if(isFinalAssignment){
       const righthandNumber: HTMLElement = document.createElement('span');
-      righthandNumber.innerText = this.rightOperator;
+      righthandNumber.innerText = this.activeEquation.rightOperator;
       const equalsSymbol: HTMLElement = document.createElement('i');
       equalsSymbol.className = 'fa fa-equals';
       this.calculatorDOM.previousValue.appendChild(righthandNumber);
@@ -172,7 +176,7 @@ export class Main {
     const symbol: HTMLElement = document.createElement('i');
     symbol.classList.add('fa');
 
-    switch(this.currentOperation){
+    switch(this.activeEquation.currentOperation){
       case Operations.ADD:
         symbol.classList.add('fa-plus');
         break;
@@ -191,18 +195,18 @@ export class Main {
   }
 
   private calculateTotal(): void{
-    if(this.currentOperation && this.leftOperator){
-      const left: number = parseFloat(this.leftOperator) || 0;
-      const right: number = parseFloat(this.rightOperator);
-      switch(this.currentOperation){
+    if(this.activeEquation.currentOperation && this.activeEquation.leftOperator){
+      const left: number = parseFloat(this.activeEquation.leftOperator) || 0;
+      const right: number = parseFloat(this.activeEquation.rightOperator);
+      switch(this.activeEquation.currentOperation){
         case Operations.ADD:
-          this.currentTotal = left + right;
+          this.activeEquation.currentTotal = left + right;
           break;
         case Operations.SUBTRACT:
-          this.currentTotal = left - right;
+          this.activeEquation.currentTotal = left - right;
           break;
         case Operations.MULTIPLY:
-          this.currentTotal = left * right;
+          this.activeEquation.currentTotal = left * right;
           break;
         case Operations.DIVIDE:
           if(right === 0){
@@ -210,25 +214,25 @@ export class Main {
             this.assignCurrentValue("Cannot divide by 0.");
             return;
           } else {
-            this.currentTotal = left / right;
+            this.activeEquation.currentTotal = left / right;
           }
           break; 
       }
-      this.assignCurrentValue(this.currentTotal.toString())
-      this.leftOperator = this.currentTotal.toString();
-    } else if(this.currentOperation && !this.leftOperator){
-      this.leftOperator = this.rightOperator.toString();
+      this.assignCurrentValue(this.activeEquation.currentTotal.toString())
+      this.activeEquation.leftOperator = this.activeEquation.currentTotal.toString();
+    } else if(this.activeEquation.currentOperation && !this.activeEquation.leftOperator){
+      this.activeEquation.leftOperator = this.activeEquation.rightOperator.toString();
     }
   }
 
   private calculateFinal(): void {
-    if(this.firstPressAfterEnter || !this.currentOperation) return;
-    this.rightOperator = this.rightOperator || '0';
-    this.assignPreviousValue(this.leftOperator, true);
+    if(this.firstPressAfterEnter || !this.activeEquation.currentOperation) return;
+    this.activeEquation.rightOperator = this.activeEquation.rightOperator || '0';
+    this.assignPreviousValue(this.activeEquation.leftOperator, true);
     this.calculateTotal();
-    this.currentOperation = null;
-    this.leftOperator = '0';
-    this.rightOperator = '';
+    this.activeEquation.currentOperation = null;
+    this.activeEquation.leftOperator = '0';
+    this.activeEquation.rightOperator = '';
     this.firstPressAfterEnter = true;
   }
 }
