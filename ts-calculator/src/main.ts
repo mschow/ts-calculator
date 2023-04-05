@@ -4,7 +4,7 @@ import { CalculatorDom } from './calculator-dom.model';
 import { Equation } from './equation.model';
 
 export class Main {
-  private readonly MAX_CHARACTERS: number = 15;
+  private readonly MAX_CHARACTERS: number = 12;
   private readonly calculatorDOM: CalculatorDom = {
     buttonContainer: <HTMLElement>document.getElementById('calc-buttons'),
     currentValue: <HTMLElement>document.querySelector('.current-value'),

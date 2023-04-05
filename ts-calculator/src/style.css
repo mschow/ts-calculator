@@ -29,7 +29,7 @@ html[data-theme='dark'] {
   --calc-display: #21242d;
   --default-text: #dce0eb;
   --btn-bg: #2a2e39;
-  --btn-bg-hover: #1c1e25;
+  --btn-bg-hover: #2a2e39;
   --text: #343434;
   --border: 1px solid #1d1d1d;
   --calc-shadow: 1px 1px 10px #050a1340;
@@ -73,7 +73,7 @@ body {
 
 .display {
   color: var(--default-text);
-  height: 10rem;
+  min-height: 10rem;
   background: var(--calc-display);
   display: flex;
   flex-direction: column;
@@ -98,6 +98,8 @@ body {
 }
 
 .current-value {
+  overflow-wrap: break-word;
+  max-width: 100%;
   font-size: 2.5rem;
   font-weight: 600;
 }
