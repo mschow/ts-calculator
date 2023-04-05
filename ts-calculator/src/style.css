@@ -3,21 +3,36 @@
 
 :root {
   --standard-gap: 0.8rem;
-  --warn: #C33C54;
-  --accent-gold: #EC9A29;
   --accent-green: #1e7979;
-  --light-bg: #F6F7F8;
-  --light-calc-body: #abc9c9;
-  --light-calc-display: #F6F7F8;
-  --light-btn-bg: #F6F7F8;
-  --light-btn-bg-hover: #EFEFEF;
-  --light-text: #343434;
-  --light-box-shadow: 1px 1px 5px #19315e25;
-  --light-border: 1px solid #bdbdbd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {}
+html[data-theme='light'] {
+  --accent-gold: #ec9a29;
+  --warn: #c33c54;
+  --bg: #f6f7f8;
+  --calc-body: #abc9c9;
+  --calc-display: #f6f7f8;
+  --default-text: var(--accent-green);
+  --btn-bg: #f6f7f8;
+  --btn-bg-hover: #efefef;
+  --text: #343434;
+  --btn-shadow: 1px 1px 5px #19315e25;
+  --border: 1px solid #bdbdbd;
+  --calc-shadow: 1px 1px 10px #19315e40;
+}
+
+html[data-theme='dark'] {
+  --accent-gold: #ffd13b;
+  --warn: #ff6347;
+  --bg: #2a2e39;
+  --calc-body: #323844;
+  --calc-display: #21242d;
+  --default-text: #dce0eb;
+  --btn-bg: #2a2e39;
+  --btn-bg-hover: #1c1e25;
+  --text: #343434;
+  --border: 1px solid #1d1d1d;
+  --calc-shadow: 1px 1px 10px #050a1340;
 }
 
 *,
@@ -28,10 +43,10 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  color: var(--light-text);
+  color: var(--text);
   margin: 0;
   min-height: 100svh;
-  background: var(--light-bg);
+  background: var(--bg);
 }
 
 #app {
@@ -43,7 +58,7 @@ body {
 }
 
 #calc {
-  background: var(--light-calc-body);
+  background: var(--calc-body);
   width: 100vw;
   height: 100svh;
 }
@@ -52,15 +67,14 @@ body {
   color: var(--warn);
 }
 
-
 .accent-gold {
   color: var(--accent-gold);
 }
 
 .display {
-  color: var(--accent-green);
+  color: var(--default-text);
   height: 10rem;
-  background: var(--light-calc-display);
+  background: var(--calc-display);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,7 +93,7 @@ body {
   margin-left: 0.5rem;
 }
 
-.previous-value{
+.previous-value {
   font-weight: 500;
 }
 
@@ -98,20 +112,20 @@ body {
 
 button {
   font-family: 'Montserrat', sans-serif;
-  background-color: var(--light-btn-bg);
-  color: var(--accent-green);
+  background-color: var(--btn-bg);
+  color: var(--default-text);
   border-radius: 4px;
   font-size: 1.3rem;
   min-height: 4rem;
   min-width: 4rem;
   border: none;
-  box-shadow: var(--light-box-shadow);
+  box-shadow: var(--btn-shadow);
 }
 
-button:hover{
+button:hover {
   cursor: pointer;
-  background-color: var(--light-btn-bg-hover);
-  border: var(--light-border);
+  background-color: var(--btn-bg-hover);
+  border: var(--border);
   box-shadow: none;
 }
 
@@ -120,16 +134,16 @@ button:hover{
 }
 
 @media only screen and (min-width: 470px) {
-  #calc{
+  #calc {
     max-width: 27rem;
     width: 97vw;
     height: unset;
     border-radius: 10px;
-    border: var(--light-border);
-    box-shadow: 1px 1px 10px #19315e40;
+    border: var(--border);
+    box-shadow: var(--calc-shadow);
   }
 
-  .display{
+  .display {
     border-radius: 10px 10px 0 0;
   }
 }
