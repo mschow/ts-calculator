@@ -6,6 +6,8 @@ import { Equation } from './equation.model';
 export class Main {
   private readonly MAX_CHARACTERS: number = 12;
   private readonly calculatorDOM: CalculatorDom = {
+    htmlMain: <HTMLElement>document.querySelector('html'),
+    themeToggle: <HTMLElement>document.querySelector('.theme-toggle'),
     buttonContainer: <HTMLElement>document.getElementById('calc-buttons'),
     currentValue: <HTMLElement>document.querySelector('.current-value'),
     previousValue: <HTMLElement>document.querySelector('.previous-value'),
@@ -20,7 +22,39 @@ export class Main {
   };
 
   constructor() {
+    this.setInitialTheme();
     this.assignEventListeners();
+  }
+
+  private setInitialTheme(): void {
+    if (localStorage.getItem('css-theme')) {
+      this.setTheme(<'light' | 'dark'>localStorage.getItem('css-theme'));
+      return;
+    }
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      this.setTheme('dark');
+    }
+  }
+
+  private toggleTheme(): void {
+    const theme: 'light' | 'dark' =
+      <'dark' | 'light'>this.calculatorDOM.htmlMain.dataset['theme'] || 'light';
+    if (theme === 'light') {
+      this.setTheme('dark');
+    } else {
+      this.setTheme('light');
+    }
+  }
+
+  private setTheme(theme: 'light' | 'dark'): void {
+    this.calculatorDOM.htmlMain.setAttribute('data-theme', theme);
+    this.calculatorDOM.themeToggle
+      .querySelector('i')
+      ?.setAttribute('class', theme === 'light' ? 'fa fa-sun' : 'fa fa-moon');
+    localStorage.setItem('css-theme', theme);
   }
 
   private assignEventListeners(): void {
@@ -30,6 +64,10 @@ export class Main {
         element.closest('button')?.dataset['operation']
       );
       this.handleOperationEvent(operation, element.innerText);
+    });
+
+    this.calculatorDOM.themeToggle?.addEventListener('click', () => {
+      this.toggleTheme();
     });
 
     window.addEventListener('keydown', (event) => {

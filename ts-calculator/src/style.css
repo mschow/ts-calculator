@@ -6,6 +6,20 @@
   --accent-green: #1e7979;
 }
 
+* {
+  -webkit-transition: background-color 0.5s ease-out, color 0.5s ease-out;
+  -moz-transition: background-color 0.5s ease-out, color 0.5s ease-out;
+  -o-transition: background-color 0.5s ease-out, color 0.5s ease-out;
+  transition: background-color 0.5s ease-out, color 0.5s ease-out;
+}
+
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
 html[data-theme='light'] {
   --accent-gold: #ec9a29;
   --warn: #c33c54;
@@ -19,6 +33,8 @@ html[data-theme='light'] {
   --btn-shadow: 1px 1px 5px #19315e25;
   --border: 1px solid #bdbdbd;
   --calc-shadow: 1px 1px 10px #19315e40;
+  --theme-toggle: rgba(0, 0, 0, 0.2);
+  --theme-toggle-hover: rgb(0, 0, 0, 1);
 }
 
 html[data-theme='dark'] {
@@ -33,6 +49,8 @@ html[data-theme='dark'] {
   --text: #343434;
   --border: 1px solid #1d1d1d;
   --calc-shadow: 1px 1px 10px #050a1340;
+  --theme-toggle: rgba(255, 255, 255, 0.2);
+  --theme-toggle-hover: rgb(255, 255, 255, 1);
 }
 
 *,
@@ -72,6 +90,7 @@ body {
 }
 
 .display {
+  position: relative;
   color: var(--default-text);
   min-height: 10rem;
   background: var(--calc-display);
@@ -91,6 +110,22 @@ body {
 
 .display span {
   margin-left: 0.5rem;
+}
+
+.theme-toggle {
+  position: absolute;
+  left: 0.7rem;
+  top: 1rem;
+}
+
+.theme-toggle i {
+  color: var(--theme-toggle);
+  font-size: 1.5rem;
+}
+
+.theme-toggle i:hover {
+  color: var(--theme-toggle-hover);
+  cursor: pointer;
 }
 
 .previous-value {
