@@ -13,13 +13,6 @@
   transition: background-color 0.5s ease-out, color 0.5s ease-out;
 }
 
-.preload * {
-  -webkit-transition: none !important;
-  -moz-transition: none !important;
-  -o-transition: none !important;
-  transition: none !important;
-}
-
 html[data-theme='light'] {
   --accent-gold: #ec9a29;
   --warn: #c33c54;
